@@ -1,9 +1,5 @@
 # WinFlip
 # (C) 2022 ELS
-# 
-# this tool constantly grabs a 1920x1080 screen to a new window
-# and flips the image horizontally
-
 
 from tkinter import *
 import tkinter
@@ -11,7 +7,7 @@ from PIL import Image, ImageTk, ImageGrab
 
 
 tk = Tk()
-wintitle = "WinFlip 0.1 © 2022 ELS"
+wintitle = "WinFlip 0.4 © 2022 ELS"
 label = tkinter.Label(tk)
 label.pack()
 tkimg = [None]
@@ -39,6 +35,7 @@ def hide_elements():
     author_name.place_forget()
     upper_left_label.place_forget()
     bottom_right_label.place_forget()
+    framerate_label.place_forget()
 
 def loopcapture():
     """ main loop """
@@ -72,10 +69,10 @@ slider_upper_y = Scale(tk, from_=0, to=1080)
 slider_upper_y.set(0)
 slider_upper_y.place(x=60, y=70)
 
-slider_bottom_x = Scale(tk, from_=0, to=1920)
+slider_bottom_x = Scale(tk, from_=320, to=1920)
 slider_bottom_x.set(1920)
 slider_bottom_x.place(x=110, y=70)
-slider_bottom_y = Scale(tk, from_=0, to=1080)
+slider_bottom_y = Scale(tk, from_=200, to=1080)
 slider_bottom_y.set(1080)
 slider_bottom_y.place(x=160, y=70)
 
