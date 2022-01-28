@@ -7,7 +7,8 @@ from PIL import Image, ImageTk, ImageGrab
 
 
 tk = Tk()
-wintitle = "WinFlip 0.4 © 2022 ELS"
+tk.iconbitmap(r"winflip.ico")
+wintitle = "WinFlip 0.5 © 2022 ELS"
 label = tkinter.Label(tk)
 label.pack()
 tkimg = [None]
