@@ -1,13 +1,26 @@
 # WinFlip
 # (C) 2022 ELS
 
+import tkinter, os, sys
 from tkinter import *
-import tkinter
 from PIL import Image, ImageTk, ImageGrab
 
 
+# get path (for python 3.8+) to be able to compile as one file using PyInstaller
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
 tk = Tk()
-tk.iconbitmap(r"winflip.ico")
+
+icon_filename = resource_path("winflip.ico")
+tk.iconbitmap(icon_filename)
+
 wintitle = "WinFlip 0.5 © 2022 ELS"
 label = tkinter.Label(tk)
 label.pack()
@@ -20,6 +33,7 @@ author_name = Label(tk, text="© 2022 ELS")
 upper_left_label = Label(tk, text="Upper Left")
 bottom_right_label = Label(tk, text="Bottom right")
 framerate_label = Label(tk, text="Framerate")
+
 
 def get_slider_values():
     return slider_upper_x.get(), slider_upper_y.get(), slider_bottom_x.get(), slider_bottom_y.get(), slider_framerate.get()
