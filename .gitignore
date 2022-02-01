@@ -2,6 +2,8 @@
 __pycache__
 *venv*
 *output*
+scanwin.py
+TODO*
 db.sqlite3
 .DS_Store
 .idea
