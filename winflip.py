@@ -28,7 +28,6 @@ wintitle = "WinFlip 0.8"
 label = tkinter.Label(tk)
 label.pack()
 tkimg = [None]
-# X0, Y0, X1, Y1 = 0, 0, 1920, 1080  # initial grab area
 
 tk.geometry("400x200")  # set initial window size
 message = Label(tk, text="Set parameters, then press Go", font=("Calibri", 12))
