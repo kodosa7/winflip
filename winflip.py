@@ -22,7 +22,7 @@ tk = Tk()
 icon_filename = resource_path("winflip.ico")
 tk.iconbitmap(icon_filename)
 
-wintitle = "WinFlip 0.8"
+wintitle = "WinFlip 0.85"
 label = tkinter.Label(tk)
 label.pack()
 tkimg = [None]
