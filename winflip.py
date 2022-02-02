@@ -1,7 +1,6 @@
 # WinFlip
 # (C) 2022 ELS
 
-from ssl import _create_default_https_context
 import tkinter, os, sys
 import win32gui
 from tkinter import *
@@ -35,7 +34,7 @@ tk = Tk()
 icon_filename = resource_path("winflip.ico")
 tk.iconbitmap(icon_filename)
 
-wintitle = "WinFlip 0.85"
+wintitle = "WinFlip v0.87"
 label = tkinter.Label(tk)
 label.pack()
 tkimg = [None]
@@ -47,18 +46,21 @@ framerate_label = Label(tk, text="Framerate")
 buttons_label = Label(tk, text="Set app type")
 
 def set_skype():
+    """ set for Skype window """
     global SEARCH_TEXT
     SEARCH_TEXT = ["Skype"]
     skype_button.config(relief=SUNKEN)
     teams_button.config(relief=RAISED)
 
 def set_teams():
+    """ set for MS Teams window """
     global SEARCH_TEXT
     SEARCH_TEXT = ["Schůzka"]
     skype_button.config(relief=RAISED)
     teams_button.config(relief=SUNKEN)
 
 def show_help():
+    """ show help window """
     help_window = Toplevel(tk)
     help_window.title("Help")
     help_window.geometry("600x220")
@@ -73,14 +75,15 @@ def show_help():
         pass
 
     def close_help_window():
+        """ do this after Close button is pressed """
         help_button["state"] = "normal"
         help_button.config(relief=RAISED)
         help_window.destroy()
 
-    help_window.protocol("WM_DELETE_WINDOW", win_close_button)
+    help_window.protocol("WM_DELETE_WINDOW", win_close_button)  # disable [X] button
 
-    btn_quit = Button(help_window, text="Close", command=close_help_window)
-    btn_quit.pack()
+    quit_button = Button(help_window, text="Close", command=close_help_window)
+    quit_button.pack()
 
 def my_callback(hwnd, extra):
     """ callback for EnumWindows function
