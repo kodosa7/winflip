@@ -1,11 +1,24 @@
 # WinFlip
 # (C) 2022 ELS
 
+from ssl import _create_default_https_context
 import tkinter, os, sys
 import win32gui
 from tkinter import *
 from PIL import Image, ImageTk, ImageGrab
 
+
+help_text = """
+    WinFlip flips the Skype/Teams (Source) screen horizontally. This might be useful
+    for situations when presenting on a bigscreen which is taken by a webcam
+    and reading texts in video calls locally is needed.\n
+    How to use the app:
+    1. Have 2 or more displays, one for Source window, other for Output window.
+    If you have one display only, both Source and Output windows can't be maximized to the full screen.
+    2. Place the original Source window to the top left position of the source display. Do not resize.
+    3. Drag the Output window out to other screen (or out of scope of the Source window).
+    4. Eventually resize the Source window to a desired size, the Output window will be resized automatically.
+    """
 
 # get path (for python 3.8+) to be able to compile as one file using PyInstaller
 def resource_path(relative_path):
@@ -45,6 +58,30 @@ def set_teams():
     skype_button.config(relief=RAISED)
     teams_button.config(relief=SUNKEN)
 
+def show_help():
+    help_window = Toplevel(tk)
+    help_window.title("Help")
+    help_window.geometry("600x220")
+    Label(help_window, text=help_text).pack(anchor='w')
+
+    help_button["state"] = "disabled"  # disable button
+    help_button.config(relief=SUNKEN)  # make button pushed
+    help_window.iconbitmap(icon_filename)  # assign icon
+
+    def win_close_button():
+        """ do nothing """
+        pass
+
+    def close_help_window():
+        help_button["state"] = "normal"
+        help_button.config(relief=RAISED)
+        help_window.destroy()
+
+    help_window.protocol("WM_DELETE_WINDOW", win_close_button)
+
+    btn_quit = Button(help_window, text="Close", command=close_help_window)
+    btn_quit.pack()
+
 def my_callback(hwnd, extra):
     """ callback for EnumWindows function
         to get spicific window coords.
@@ -81,6 +118,7 @@ def hide_elements():
     skype_button.place_forget()
     teams_button.place_forget()
     go_button.place_forget()
+    help_button.place_forget()
     slider_framerate.place_forget()
     message.place_forget()
     author_name.place_forget()
@@ -135,8 +173,10 @@ skype_button = tkinter.Button(tk, text="Skype", command=set_skype)
 skype_button.place(x=30, y=70, height=50, width=80)
 teams_button = tkinter.Button(tk, text="MS Teams", command=set_teams)
 teams_button.place(x=30, y=130, height=50, width=80)
+help_button = tkinter.Button(tk, text="Help", command=show_help)
+help_button.place(x=300, y=70, height=50, width=80)
 go_button = tkinter.Button(tk, text="Go!", command=loopcapture)  # launch capture window
-go_button.place(x=310, y=130, height=50, width=80)
+go_button.place(x=300, y=130, height=50, width=80)
 
 
 if __name__ == "__main__":
