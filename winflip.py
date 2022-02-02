@@ -7,8 +7,6 @@ from tkinter import *
 from PIL import Image, ImageTk, ImageGrab
 
 
-SEARCH_TEXT = ["Schůzka"]  # set to Teams at first
-
 # get path (for python 3.8+) to be able to compile as one file using PyInstaller
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -30,17 +28,22 @@ label.pack()
 tkimg = [None]
 
 tk.geometry("400x200")  # set initial window size
-message = Label(tk, text="Set parameters, then press Go", font=("Calibri", 12))
+message = Label(tk, text="Adjust app type and framerate, then press Go", font=("Calibri", 12))
 author_name = Label(tk, text="© 2022 ELS")
 framerate_label = Label(tk, text="Framerate")
+buttons_label = Label(tk, text="Set app type")
 
 def set_skype():
     global SEARCH_TEXT
     SEARCH_TEXT = ["Skype"]
+    skype_button.config(relief=SUNKEN)
+    teams_button.config(relief=RAISED)
 
 def set_teams():
     global SEARCH_TEXT
     SEARCH_TEXT = ["Schůzka"]
+    skype_button.config(relief=RAISED)
+    teams_button.config(relief=SUNKEN)
 
 def my_callback(hwnd, extra):
     """ callback for EnumWindows function
@@ -62,7 +65,12 @@ def get_all_window_sizes():
         specified in my_callback() """
 
     win32gui.EnumWindows(my_callback, None)
-    return new_rect
+    try:
+        return new_rect
+    except NameError:
+        print(f"window with string {SEARCH_TEXT[0]} not found")
+        tk.destroy()
+        quit()
 
 def get_slider_framerate():
     """ Gets value from slider """
@@ -77,6 +85,7 @@ def hide_elements():
     message.place_forget()
     author_name.place_forget()
     framerate_label.place_forget()
+    buttons_label.place_forget()
 
 def loopcapture():
     """ Main loop
@@ -87,20 +96,16 @@ def loopcapture():
         - grabs the window size to an image
         - flips it over """
 
-    print(SEARCH_TEXT)
     hide_elements()
     fr = get_slider_framerate()  # get slider fr value
     
     nx0, ny0, nx1, ny1 = get_all_window_sizes()
 
-    rx = nx1 - nx0
-    ry = ny1 - ny0
+    rx, ry = nx1 - nx0, ny1 - ny0
     if rx <= 10:
         rx = 10
     if ry <= 10:
         ry = 10
-
-    # print("real xy: ", rx, "x", ry)
 
     tk.geometry(str(rx) + "x" + str(ry))  # size it
 
@@ -118,21 +123,28 @@ def loopcapture():
 # show texts
 message.place(x=10, y=14)
 author_name.place(x=330, y=180)
-framerate_label.place(x=220, y=50)
+framerate_label.place(x=142, y=45)
+buttons_label.place(x=30, y=45)
 
 # configure slider and button
 slider_framerate = Scale(tk, from_=1, to=100)
 slider_framerate.set(5)
-slider_framerate.place(x=220, y=70)
+slider_framerate.place(x=140, y=75)
 
 skype_button = tkinter.Button(tk, text="Skype", command=set_skype)
-skype_button.place(x=10, y=130, height=50, width=80)
+skype_button.place(x=30, y=70, height=50, width=80)
 teams_button = tkinter.Button(tk, text="MS Teams", command=set_teams)
-teams_button.place(x=100, y=130, height=50, width=80)
+teams_button.place(x=30, y=130, height=50, width=80)
 go_button = tkinter.Button(tk, text="Go!", command=loopcapture)  # launch capture window
 go_button.place(x=310, y=130, height=50, width=80)
 
 
 if __name__ == "__main__":
+    # init settings..
+    SEARCH_TEXT = ["Skype"]
+    skype_button.config(relief=SUNKEN)
+    teams_button.config(relief=RAISED)
+
+    # ..then do things
     tk.wm_title(wintitle)
     tk.mainloop()
